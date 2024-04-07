@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Overlay</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="map-container">
+            <img src="{{url_for('static', filename='map1.jpg')}}" alt="Map">
+            <div class="overlay"></div>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 74%; left: 48.3%;"></button>
+                <input type="hidden" name="node" value="0">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 67%; left: 82.3%;"></button>
+                <input type="hidden" name="node" value="1">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 34.3%; left: 84.3%;"></button>
+                <input type="hidden" name="node" value="2">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 17%; left: 79.3%;"></button>
+                <input type="hidden" name="node" value="3">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 43.5%; left: 65.7%;"></button>
+                <input type="hidden" name="node" value="4">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 14.8%; left: 68.9%;"></button>
+                <input type="hidden" name="node" value="5">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 15.5%; left: 48.2%;"></button>
+                <input type="hidden" name="node" value="6">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 19%; left: 25.5%;"></button>
+                <input type="hidden" name="node" value="7">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 28.3%; left: 15.4%;"></button>
+                <input type="hidden" name="node" value="8">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 44.5%; left: 6.7%;"></button>
+                <input type="hidden" name="node" value="9">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 73.2%; left: 13.7%;"></button>
+                <input type="hidden" name="node" value="10">
+            </form>
+            
+            <form action="{{ url_for('statistic')}}" method="post">
+                <button type="submit" class="node" style="top: 87.1%; left: 29.8%;"></button>
+                <input type="hidden" name="node" value="11">
+            </form>
+        </div>
+
+        <div class="sidebar">
+            <div id="container">
+            <h1>{{ suburb | safe }} Statistic</h1>
+            <form action="{{ url_for('predict')}}" method="post">
+                <!-- <label for="nodeInput">Amount of Increase expected:</label> -->
+                <!-- <input type="text" name="node" placeholder="Enter %" required="required"> -->
+                <button type="submit">Predict</button>
+            </form>
+            <canvas id="linechart1" width="400" height="200"></canvas>
+            <script>
+                var ctx1 = document.getElementById('linechart1').getContext('2d');
+                var linechart1 = new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: {{ timeline | safe }},
+                        datasets: [
+                            {
+                                label: "Data points",
+                                data: {{ values | safe }},
+                                fill: false,
+                                borderColor: "rgb(75, 192, 192)",
+                                lineTension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: false
+                    }
+                });
+            </script>
+            </div>
+            
+            <div id="container2">
+            <canvas id="lineChart2" width="400" height="200"></canvas>
+            <script>
+                var ctx1 = document.getElementById('linechart1').getContext('2d');
+                var linechart1 = new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: {{ timeline | safe }},
+                        datasets: [
+                            {
+                                label: "Data points",
+                                data: {{ values | safe }},
+                                fill: false,
+                                borderColor: "rgb(75, 192, 192)",
+                                lineTension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: false
+                    }
+                });
+            
+                var ctx2 = document.getElementById('lineChart2').getContext('2d');
+                var lineChart2 = new Chart(ctx2, {
+                    type: "line",
+                    data: {
+                        labels: {{ predict_timeline | safe }},
+                        datasets: [
+                            {
+                                label: "Prediction",
+                                data: {{ prediction | safe }},
+                                fill: false,
+                                borderColor: "rgb(255, 99, 132)",
+                                lineTension: 0.1
+                            }, 
+                            {
+                                label: "True Value",
+                                data: {{ labs | safe }},
+                                fill: false,
+                                borderColor: "rgb(75, 192, 192)",
+                                lineTension: 0.1
+                            
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: false
+                    }
+                });
+            </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
